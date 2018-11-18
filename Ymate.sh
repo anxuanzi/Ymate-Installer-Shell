@@ -34,7 +34,9 @@ git_dir="Ymate-env"
 
 cd $git_dir
 
-wget https://github.com/anxuanzi/Ymate-Installer-Shell/update.sh
+echo -e "\033[35m 创建更新项目的脚本 \033[0m"
+
+wget https://raw.githubusercontent.com/anxuanzi/Ymate-Installer-Shell/master/update.sh
 
 chmod 777 update.sh
 
