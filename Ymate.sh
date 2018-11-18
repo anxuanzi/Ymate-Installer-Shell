@@ -34,16 +34,7 @@ git_dir="Ymate-env"
 
 cd $git_dir
 
-FILE="update.sh"
-
-echo "#!/bin/sh" > $FILE
-echo "for dir in $(ls -d */)" >> $FILE
-echo "do" >> $FILE
-echo "cd $dir" >> $FILE
-echo "echo \"进入目录： $dir 执行更新\"" >> $FILE
-echo "git pull" >> $FILE
-echo "cd .." >> $FILE
-echo "done" >> $FILE
+wget https://github.com/anxuanzi/Ymate-Installer-Shell/update.sh
 
 chmod 777 update.sh
 
