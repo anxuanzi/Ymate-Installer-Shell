@@ -58,11 +58,11 @@ echo    "            可能会要求您输入当前用户密码          "
 echo    "============================================="
 
 SHELL_DIR=$(cd "$(dirname "$0")";pwd)
-if[[ $(echo $0 | grep "zsh") != "" ]]
+if[[ $(echo $0 | grep "zsh") != "" ]];
 then
-sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
+  sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
 else
-sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
+  sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
 fi
 
 cd $git_dir
