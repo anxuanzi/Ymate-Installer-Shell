@@ -55,15 +55,14 @@ git_dir="ymp_environment"
 
 echo    "============================================="
 echo -e "        \033[35m 创建系统变量中 \033[0m        "
-echo    "            可能会要求您输入当前用户密码          "
 echo    "============================================="
 
 SHELL_DIR=$(cd "$(dirname "$0")";pwd)
 
 if [[ $(echo $0 | grep "zsh") != "" ]] ;then
-  sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
+  echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
 else
-  sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
+  echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
 fi
 
 cd $git_dir
@@ -93,7 +92,7 @@ echo -e "\033[34m 进入目录： $dir \033[0m"
 echo -e "\033[34m 正在编译安装源码，请耐心等待... \033[0m"
 # 获取当前时间
 CURRENT_TIME=`date +"%Y%m%d%H%M%S"`
-mvn clean source:jar install .> ${TMP_FILE}${CURRENT_TIME}${COUNT}
+mvn clean source:jar install > ${TMP_FILE}${CURRENT_TIME}${COUNT}
 COMPILE_RESULT=`grep 'BUILD SUCCESS' ${TMP_FILE}${CURRENT_TIME}${COUNT}`
 if [ -z "$COMPILE_RESULT" ];
 then

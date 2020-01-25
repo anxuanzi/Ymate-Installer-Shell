@@ -10,7 +10,7 @@ Ymate平台开发环境快速安装脚本，本脚本默认从github克隆ymp核
 ## 使用方法(Mac/Linux)
 1. 使用终端等命令行工具进入想要存放ymp系列框架的目录
 
-2. 执行命令`curl -O https://raw.githubusercontent.com/anxuanzi/Ymate-Installer-Shell/master/Ymate.sh && chmod +x Ymate.sh && ./Ymate.sh`
+2. 执行命令`curl -O https://raw.githubusercontent.com/anxuanzi/Ymate-Installer-Shell/master/Ymate.sh && chmod 777 Ymate.sh && sudo ./Ymate.sh`
 
 3. 脚本运行后会出现菜单，您可以选择安装与更新，我们在这选择`1`然后回车然后脚本会***在当前脚本所在的同一级***目录下安装ymp系列模块及框架。（安装过程中脚本会有提示，如果长时间无法克隆项目请终止脚本更改脚本中的git存储库链接为gitee的链接）
 
