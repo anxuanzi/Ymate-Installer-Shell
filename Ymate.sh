@@ -50,6 +50,7 @@ elif [ $sel_num -eq 1 ];then
 echo "安装中 请耐心等待(速度根据网络而定.)"
 
 git_dir="ymp_environment"
+
 [ -d $git_dir ]&&echo "存在"||mkdir $git_dir
 
 echo    "============================================="
@@ -58,8 +59,8 @@ echo    "            可能会要求您输入当前用户密码          "
 echo    "============================================="
 
 SHELL_DIR=$(cd "$(dirname "$0")";pwd)
-if[[ $(echo $0 | grep "zsh") != "" ]];
-then
+
+if [[ $(echo $0 | grep "zsh") != "" ]] ;then
   sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
 else
   sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
