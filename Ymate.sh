@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 
 git_add=(
 "https://github.com/suninformation/ymate-framework-v2.git"
@@ -13,9 +14,13 @@ git_add=(
 "https://github.com/suninformation/ymate-module-oauth-connector.git"
 "https://github.com/suninformation/ymate-module-scheduler.git"
 "https://github.com/suninformation/ymate-module-sso.git"
-"https://github.com/suninformation/ymate-module-embed.git"
+"https://github.com/suninformation/ymate-webui.git"
 )
 
+# 定义该脚本的临时文件的名字
+TMP_FILE=/tmp/ymp_installer
+# 删除原来的临时垃圾
+rm -rf ${TMP_FILE}*
 
 menu(){
 clear
@@ -44,23 +49,27 @@ elif [ $sel_num -eq 1 ];then
 
 echo "安装中 请耐心等待(速度根据网络而定.)"
 
-git_dir="Ymate-env"
+git_dir="ymp_environment"
 [ -d $git_dir ]&&echo "存在"||mkdir $git_dir
 
 echo    "============================================="
-echo -e "        \033[35m 创建系统变量中 \033[0m         "
+echo -e "        \033[35m 创建系统变量中 \033[0m        "
+echo    "            可能会要求您输入当前用户密码          "
 echo    "============================================="
+
 SHELL_DIR=$(cd "$(dirname "$0")";pwd)
-BASH_PROFILE_NAME=".bash_profile"
-cd
-echo -e "alias ymate=\"sh ${SHELL_DIR}/Ymate.sh\"" >> ${BASH_PROFILE_NAME}
-source .bash_profile
+if[[ $(echo $0 | grep "zsh") != "" ]]
+then
+sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
+else
+sudo echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
+fi
 
 cd $git_dir
 
 wget https://raw.githubusercontent.com/anxuanzi/Ymate-Installer-Shell/master/update.sh &>/dev/null
 
-chmod 777 update.sh
+chmod +x update.sh
 
 for i in ${git_add[@]}
 
@@ -75,17 +84,28 @@ done
 
 echo -e "\033[33m ****** 项目已全部拉取完成！！！ ****** \033[0m"
 echo -e "\033[33m ******    开始编译安装       ****** \033[0m"
-
+COUNT=100
 for dir in $(ls -d */)
 do
 cd $dir
 echo -e "\033[34m 进入目录： $dir \033[0m"
-echo -e "\033[34m 正在编译安装源码，请耐心等待（一般情况不会卡住） \033[0m"
-echo "-------------------------------------------------------"
-mvn clean source:jar install &> /dev/null
+echo -e "\033[34m 正在编译安装源码，请耐心等待... \033[0m"
+# 获取当前时间
+CURRENT_TIME=`date +"%Y%m%d%H%M%S"`
+mvn clean source:jar install .> ${TMP_FILE}${CURRENT_TIME}${COUNT}
+COMPILE_RESULT=`grep 'BUILD SUCCESS' ${TMP_FILE}${CURRENT_TIME}${COUNT}`
+if [ -z "$COMPILE_RESULT" ];
+then
+ echo -e "\033[31m\033[01m\033[05m[ Maven 编译过程中发生错误，详情请您查看日志文件：/tmp/${TMP_FILE}${CURRENT_TIME}${COUNT}]]\033[0m"
+ echo "程序终止！"
+ exit
+else
+ echo -e "\033[32m[ 当前模块编译成功，进行下一模块编译... ]\033[0m"
+fi
+COUNT=$(($COUNT+100))
 cd ..
 done
-echo -e "\033[47;30m  已全部安装编译完成，请您重启终端或者控制台程序以启用ymate命令 \033[0m"
+echo -e "\033[32m[ 已全部安装编译完成，请您重启终端或者控制台程序以启用ymate命令 ]\033[0m"
 
 elif [ $sel_num -eq 2 ];then
 
@@ -108,5 +128,3 @@ fi
 }
 
 menu
-
-

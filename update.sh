@@ -2,6 +2,11 @@
 
 clear
 
+# 定义该脚本的临时文件的名字
+TMP_FILE=/tmp/ymp_updater
+# 删除原来的临时垃圾
+rm -rf ${TMP_FILE}*
+
 echo "===================================================================="
 echo "          ___          ___          ___       ___          ___      "
 echo "         |\__\        /\__\        /\  \     /\  \        /\  \     "
@@ -15,7 +20,7 @@ echo "       \/__/           /:/  /       /:/  / \/__/        \:\ \/__/   "
 echo "                      /:/  /       /:/  /                \:\__\     "
 echo "                      \/__/        \/__/                  \/__/     "
 echo "===================================================================="
-
+COUNT=100
 for dir in $(ls -d */)
 do
   cd $dir
@@ -24,8 +29,22 @@ do
   git pull &> /dev/null
   echo "____________________________________"
   echo "正在重新编译更新后的源码"
-  mvn clean source:jar install &> /dev/null
-  echo "编译完成！"
+  # 获取当前时间
+  CURRENT_TIME=`date +"%Y%m%d%H%M%S"`
+
+  mvn clean source:jar install .> ${TMP_FILE}${CURRENT_TIME}${COUNT}
+
+  COMPILE_RESULT=`grep 'BUILD SUCCESS' ${TMP_FILE}${CURRENT_TIME}${COUNT}`
+  
+  if [ -z "$COMPILE_RESULT" ];
+  then
+    echo -e "\033[31m\033[01m\033[05m[ Maven 编译过程中发生错误，详情请您查看日志文件：/tmp/${TMP_FILE}${CURRENT_TIME}${COUNT}]]\033[0m"
+    echo "程序终止！"
+    exit
+  else
+    echo -e "\033[32m[ 当前模块编译成功，进行下一模块编译... ]\033[0m"
+  fi
+  COUNT=$(($COUNT+100))
   echo "===================================="
   cd ..
 done
