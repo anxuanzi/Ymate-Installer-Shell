@@ -18,7 +18,7 @@ git_add=(
 )
 
 # 定义该脚本的临时文件的名字
-TMP_FILE=/tmp/ymp_installer
+TMP_FILE=/tmp/ymp_installer/log-
 # 删除原来的临时垃圾
 rm -rf ${TMP_FILE}*
 
@@ -60,9 +60,12 @@ echo    "============================================="
 SHELL_DIR=$(cd "$(dirname "$0")";pwd)
 
 if [[ $(echo $0 | grep "zsh") != "" ]] ;then
-  echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/zshrc
+cd
+echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> .zshrc
+source .zshrc
 else
-  echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> /etc/bashrc
+echo -e "alias ymate=\".${SHELL_DIR}/Ymate.sh\"" >> .bash_profile
+source .bash_profile
 fi
 
 cd $git_dir
@@ -92,12 +95,12 @@ echo -e "\033[34m 进入目录： $dir \033[0m"
 echo -e "\033[34m 正在编译安装源码，请耐心等待... \033[0m"
 # 获取当前时间
 CURRENT_TIME=`date +"%Y%m%d%H%M%S"`
-mvn clean source:jar install > ${TMP_FILE}${CURRENT_TIME}${COUNT}
+mvn clean source:jar install >> ${TMP_FILE}${CURRENT_TIME}${COUNT}
 COMPILE_RESULT=`grep 'BUILD SUCCESS' ${TMP_FILE}${CURRENT_TIME}${COUNT}`
 if [ -z "$COMPILE_RESULT" ];
 then
- echo -e "\033[31m\033[01m\033[05m[ Maven 编译过程中发生错误，详情请您查看日志文件：/tmp/${TMP_FILE}${CURRENT_TIME}${COUNT}]]\033[0m"
- echo "程序终止！"
+    echo -e "\033[31m Maven 编译过程中发生错误，详情请您查看日志文件：${TMP_FILE}${CURRENT_TIME}${COUNT} \033[0m"
+    echo -e "\033[44;37m 脚本终止 \033[0m"
  exit
 else
  echo -e "\033[32m[ 当前模块编译成功，进行下一模块编译... ]\033[0m"

@@ -3,7 +3,7 @@
 clear
 
 # 定义该脚本的临时文件的名字
-TMP_FILE=/tmp/ymp_updater
+TMP_FILE=/tmp/ymp_updater/log-
 # 删除原来的临时垃圾
 rm -rf ${TMP_FILE}*
 
@@ -38,8 +38,8 @@ do
   
   if [ -z "$COMPILE_RESULT" ];
   then
-    echo -e "\033[31m\033[01m\033[05m[ Maven 编译过程中发生错误，详情请您查看日志文件：/tmp/${TMP_FILE}${CURRENT_TIME}${COUNT}]]\033[0m"
-    echo "程序终止！"
+    echo -e "\033[31m Maven 编译过程中发生错误，详情请您查看日志文件：${TMP_FILE}${CURRENT_TIME}${COUNT} \033[0m"
+    echo -e "\033[44;37m 脚本终止 \033[0m"
     exit
   else
     echo -e "\033[32m[ 当前模块编译成功，进行下一模块编译... ]\033[0m"
