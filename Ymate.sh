@@ -95,7 +95,7 @@ echo -e "\033[34m 进入目录： $dir \033[0m"
 echo -e "\033[34m 正在编译安装源码，请耐心等待... \033[0m"
 # 获取当前时间
 CURRENT_TIME=`date +"%Y%m%d%H%M%S"`
-mvn clean source:jar install >> ${TMP_FILE}${CURRENT_TIME}${COUNT}
+mvn clean source:jar install > ${TMP_FILE}${CURRENT_TIME}${COUNT}
 COMPILE_RESULT=`grep 'BUILD SUCCESS' ${TMP_FILE}${CURRENT_TIME}${COUNT}`
 if [ -z "$COMPILE_RESULT" ];
 then
