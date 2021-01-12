@@ -119,7 +119,7 @@ install(){
 	do
 		name=`echo "$each"|awk -F'on/' '{print $2 }'|awk -F'.git' '{print $1}'`
   		echo -e "\033[35m 正在拉取项目: $name \033[0m"
-		git clone -b master $each
+		git clone -b dev $each
 		if [ $? -eq 0 ] ;then
 			echo -e "\033[35m DONE! \033[0m"
 		fi
